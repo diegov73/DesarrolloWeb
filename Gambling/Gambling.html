@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>all in Casino</title>
+        <Style>
+            body{
+                background-color: white;
+            }
+            ul{
+               list-style-type: none;
+               margin: 0; 
+               padding: 0;
+               overflow: hidden;
+               background-color: red;
+               border: 1px solid #a80303;
+            }
+
+            li{
+                float: left;
+            }
+
+            li a{
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 10px 14px;
+                text-decoration: none;
+            }
+            
+            li a:hover:not(.active){
+                background-color: #bf0404;
+            }
+
+            li a.active{
+                background-color: white;
+                color: black;
+            }
+            li a.active:hover{
+                background-color: #cfcfcf;
+            }
+
+            li a.balance{
+                background-color: #029c09;
+            }
+            li a.balance:hover{
+                background-color: #bf0404;
+                color: black;
+            }
+
+        </Style>
+    </head>
+
+    <body>
+        <ul>
+            <li><a href="sport">Sport</a></li>
+            <li><a href="roulette">Roulette</a></li>
+            <li><a href="slots">Slots</a></li>
+
+            <li><a href="#home" style="float:none">All in Casino</a></li>
+            
+            <li style="float: right"><a class="active" href="#logIn">logIn</a></li>
+            <li style="float:right;"><a class="balance" href="#saldo">$0.00</a></li>
+            
+            <li style="float: right"><a>withDraw</a></li>
+            <li style="float: right"><a>Deposit</a></li>
+        </ul>
+    </body>
+</html>
