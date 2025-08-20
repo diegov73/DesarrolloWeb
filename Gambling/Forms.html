@@ -1,70 +1,37 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>logIn</title>
-        <Style>
-            body{
-                color: black;
-                background-color: #ffffff;
-            }
-            div{
-                padding: 10px 0px;
-            }
-            .container{
-                border-radius: 5px;
-                padding: 20px;
-                background-color: #f3f3f3;
-            }
+        <title>logIn.js</title>
 
-            input[type=submit]{
-                background-color: #ad0000;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-            input[type=submit]:hover{
-                background-color: #cc0000;
-            }
-        </Style>
+        <link rel="stylesheet" href="forms.css">
     </head>
     <body>
-        <h2>Create an account</h2>
-        <p>Remember: gambing is not adictive.</p>
         
-        <div class="container">
+        <h2>LogIn</h2>
+
+        <div class="fondo">
+
+            <label>Name:</label>
             <div>
-                <label>-Account name:</label>
+                <input type="text" id="name" placeholder="your name..."></input>
             </div>
-                <input type="text" id="aName" placeholder="your account name...">
+            
+            <label>Password:</label>
+            <div>
+                <input type="password" id="password" placeholder="your password..."></input>
+            </div>
             
             <div>
-                <label>-First name</label>
+                <button onclick="submit()">submit</button>
             </div>
-            <input type="text" id="fName" placeholder="your first name...">
             
             <div>
-                <label>-Last name</label>
+                <p id="introduction"></p>
             </div>
-            <input type="text" id="lName" placeholder="your last name...">
-            
-            <div>
-                <label>-Birthdate</label>
-            </div>
-            <input type="text" id="birthdate" placeholder="DD/MM/YYYY">
-
-            <div>
-                <label>-Country</label>
-            </div>
-            <input type="text" id="country" placeholder="your country...">
-
-            <div>
-                <label>-Email addrees</label>
-            </div>
-            <input type="text" id="eMail" placeholder="your email...">
-
-            <div>
-                <input type="submit" value="Submit">
-            </div>
+        
+            <a href="signUp.html">you don't have an account</a>
         </div>
-    </body>
 
+        <script src="logIn.js"></script>
+    </body>
 </html>
