@@ -1,84 +1,85 @@
-h2{
+/*clases modificadas para logIn y signUp. se espera que tambien sirva para
+el menu para ingresar y retirar dinero. forms significa formulario*/
+
+h2.forms{
     color: white;
     background-color: red;
     text-align: center;
+    border: 1px solid #a80303;
     padding: 15px 0px;
     margin: 0px;
 }
 
-a{
-    text-align: right;
-    padding-right: 20px;
-}
-
-p{
+p.forms{
     text-align: left;
     padding-left: 20px;
 }
 
-div{
-    text-align: center;
-    padding-bottom: 15px;
-}
-
-div.fondo{
+div.formsFondo{
     background-color: rgb(235, 235, 235);
     padding-top: 15px;
     margin-top: 0px;
+    text-align: center;
+}
+
+div.espacio{
+    padding-bottom: 10px;
 }
 
 input:hover{
     background-color: lightgrey;
 }
 
-button{
+button.submit{
     color: white;
     background-color: #6457d3;
     border-radius: 15px;
 }
 
-button:hover{
+button.submit:hover{
     background-color: rgb(80, 123, 201);
 }
 
-ul {
+/*clases modificadas para home*/
+
+ul.home{
     list-style-type: none;
+    font-size: 20px;
     color: white;
     background-color: red;
     overflow: hidden;
-    border: 2px solid #a80303;
+    border: 1px solid #a80303;
 }
 
-li {
-    padding: 10px 10px;
+li.homeLeft{
     float: left;
+    padding: 10px 10px;
     text-align: center;
 }
 
+li.homeRight{
+    float: right;
+    padding: 10px 10px;
+    text-align: center;
+}
     li:hover {
         background-color: #bf0404;
     }
 
-    li.right {
-        float: right;
+#wallet{
+    background-color: rgb(3, 151, 3);
+}
+    #wallet:hover{
+        background-color: green;
     }
 
-    li.logIn {
-        float: right;
-        background-color: white;
+#logIn{
+    background-color: white;
+}
+    #logIn:hover{
+        background-color: rgb(206, 206, 206);
+    }
+
+    a.logIn{
         color: black;
     }
-
-        li.logIn:hover {
-            background-color: rgb(214, 214, 214);
-        }
-
-    li.cash {
-        float: right;
-        background-color: #029c09;
-    }
-
-        li.cash:hover {
-            background-color: #017406;
-        }
-
