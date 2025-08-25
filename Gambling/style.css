@@ -40,7 +40,7 @@ button.submit:hover{
     background-color: rgb(80, 123, 201);
 }
 
-/*clases modificadas para home*/
+/*barra superior horizontal*/
 
 ul.home{
     list-style-type: none;
@@ -83,3 +83,31 @@ li.homeRight{
     a.logIn{
         color: black;
     }
+
+/*clases para landingSite*/
+
+p.allIn{
+    font-size: 100px;
+    margin: 12px 0px;
+    padding-left: 25px;
+}
+
+H2.sub{
+    font-size: 40px;
+    margin: 15px 0px;
+    padding-left: 25px;
+}
+
+div.contenedor{
+    display: flex;
+    padding-left: 25px;
+    gap:130px;
+}
+
+div.modulo{
+
+}
+
+div.tituloModulo{
+
+}
