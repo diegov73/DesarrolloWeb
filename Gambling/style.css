@@ -1,113 +1,135 @@
-/*clases modificadas para logIn y signUp. se espera que tambien sirva para
-el menu para ingresar y retirar dinero. forms significa formulario*/
+<style>
+style.css
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    background-color: #121212; 
+    color: #fff; 
+    line-height: 1.6;
+}
 
-h2.forms{
-    color: white;
-    background-color: red;
+h1, h2, h3 {
     text-align: center;
-    border: 1px solid #a80303;
-    padding: 15px 0px;
-    margin: 0px;
+    color: #eb3926; 
+    margin-top: 20px;
 }
 
-p.forms{
-    text-align: left;
-    padding-left: 20px;
+h1 {
+    font-size: 36px;
 }
 
-div.formsFondo{
-    background-color: rgb(235, 235, 235);
-    padding-top: 15px;
-    margin-top: 0px;
+h2 {
+    font-size: 28px;
+}
+
+h3 {
+    font-size: 22px;
+    color: #ffffff; 
+}
+
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.userInfo, .balance, .transacciones, .deposito, .retiro, .historialTransacciones, .ruleta, .Saldo {
+    background: #1e1e1e; 
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    max-width: 800px;
+    color: #fff; 
+}
+
+
+.balance p {
+    font-size: 26px;
+    font-weight: bold;
+    color: #e74c3c; 
     text-align: center;
 }
 
-div.espacio{
-    padding-bottom: 10px;
-}
-
-input:hover{
-    background-color: lightgrey;
-}
-
-button.submit{
-    color: white;
-    background-color: #6457d3;
-    border-radius: 15px;
-}
-
-button.submit:hover{
-    background-color: rgb(80, 123, 201);
-}
-
-/*barra superior horizontal*/
-
-ul.home{
-    list-style-type: none;
-    font-size: 20px;
-    color: white;
-    background-color: red;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #a80303;
 }
 
-li.homeLeft{
-    float: left;
-    padding: 10px 10px;
+th, td {
+    padding: 12px;
     text-align: center;
+    color: #fff; 
 }
 
-li.homeRight{
-    float: right;
-    padding: 10px 10px;
+th {
+    background-color: #333;
+    color: #e74c3c; 
+}
+
+tr:nth-child(even) {
+    background-color: #1a1a1a;
+}
+
+tr:hover {
+    background-color: #444;
+}
+
+input, button .deposito, button.retiro {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+input {
+    width: 90%;
+    background: #2a2a2a;
+    color: #fff;
+}
+
+button {
+    background-color: #e74c3c;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #c0392b;
+}
+
+.ruleta a {
+    display: block;
     text-align: center;
-}
-    li:hover {
-        background-color: #bf0404;
-    }
-
-#wallet{
-    background-color: rgb(3, 151, 3);
-}
-    #wallet:hover{
-        background-color: green;
-    }
-
-#logIn{
-    background-color: white;
-}
-    #logIn:hover{
-        background-color: rgb(206, 206, 206);
-    }
-
-    a.logIn{
-        color: black;
-    }
-
-/*clases para landingSite*/
-
-p.allIn{
-    font-size: 100px;
-    margin: 12px 0px;
-    padding-left: 25px;
+    margin-top: 10px;
+    padding: 15px 30px;
+    background-color: #e74c3c;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s;
 }
 
-H2.sub{
-    font-size: 40px;
-    margin: 15px 0px;
-    padding-left: 25px;
+.ruleta a:hover {
+    background-color: #c0392b;
 }
 
-div.contenedor{
-    display: flex;
-    padding-left: 25px;
-    gap:130px;
+.historialTransacciones ul {
+    list-style: none;
+    padding: 0;
 }
 
-div.modulo{
-
+.historialTransacciones li {
+    padding: 8px;
+    border-bottom: 1px solid #444;
+    color: #fff;
 }
+</style>
 
-div.tituloModulo{
-
-}
