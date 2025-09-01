@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesa de Ruleta Europea</title>
+    <link rel ="stylesheet" href="style.css">
+</head>
+<body>
+    <h2 class="forms"> Mesa de Ruleta Europea</h2>
+
+    <div class = "formsFondo">
+        <h3 class = "subtitulo"> Tablero de Ruleta</h3>
+        <div class = "espacio">
+            <img src="Ruleta_Europea.jpeg" alt="Tablero de Ruleta Europea" class="ruleta-img"> 
+        </div>
+
+        <h3 class="subtitulo"> Estado del juego</h3>
+        <p class="estado"> 🔴 recibiendo apuestas</p>
+
+        <h3 class="subtitulo"> Saldo disponible</h3>
+        <p class="saldo"> $1000</p>
+
+        <h3 class="subtitulo"> últimos 5 números ganadores</h3>
+        <ul class="lista">
+            <li><span class="rojo">23 (Rojo)</span></li>
+            <li><span class="negro">8 (Negro)</span></li>
+            <li><span class="rojo">5 (Rojo)</span></li>
+            <li><span class="negro">26 (Negro)</span></li>
+            <li><span class="verde">0 (Verde)</span></li>
+        </ul>
+
+        <h3 class="subtitulo">últimas 5 apuestas</h3>
+        <table class="tabla-apuesta">
+            <tr>
+                <th>Tipo</th>
+                <th>Monto</th>
+                <th>Resultado</th>
+                <th>Variación Saldo</th>
+            </tr>
+            <tr>
+                <td>Pleno al 23</td>
+                <td>$50</td>
+                <td>Ganada</td>
+                <td>+ $1.750</td>
+            </tr>
+            <tr>
+                <td>Rojo</td>
+                <td>$100</td>
+                <td>Perdida</td>
+                <td>- $100</td>
+            </tr>
+            <tr>
+                <td>Par</td>
+                <td>$200</td>
+                <td>Ganada</td>
+                <td>+ $200</td>
+            </tr>
+            <tr>
+                <td>Negro</td>
+                <td>$100</td>
+                <td>Perdida</td>
+                <td>- $100</td>
+            </tr>
+            <tr>
+                <td>Columna 1</td>
+                <td>$150</td>
+                <td>Ganada</td>
+                <td>+ $300</td>
+            </tr>
+        </table>
+        <div class="espacio">
+            <button class="submit">Volver al Inicio</button>
+        </div>
+    </div>    
+</body>
+</html>
