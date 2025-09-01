@@ -1,0 +1,186 @@
+/*Clases para reglas de la ruleta */
+h2.forms {
+    color: white;
+    background-color: red;
+    text-align: center;
+    border: 1px solid #a80303;
+    padding: 15px 0px;
+    margin: 0px;
+}
+
+
+p.forms {
+    text-align: left;
+    padding: 10px 20px;
+    color: black;
+}
+
+/* Caja de fondo para el contenido */
+div.formsFondo {
+    background-color: rgb(235, 235, 235);
+    padding: 20px;
+    margin-top: 0px;
+    text-align: left;
+    border-radius: 8px;
+}
+
+/* Subtítulos de secciones */
+h3.subtitulo {
+    color: red;
+    margin-top: 20px;
+}
+
+/* Listas de reglas/apuestas */
+ul.lista {
+    text-align: left;
+    padding-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+/* Espaciado para botón */
+div.espacio {
+    padding-top: 15px;
+    text-align: center;
+}
+
+/* Botón similar al de signUp */
+button.submit {
+    color: white;
+    background-color: #6457d3;
+    border-radius: 15px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+button.submit:hover {
+    background-color: rgb(80, 123, 201);
+}
+
+
+
+/* de aqui pa abajo es para la mesa de ruleta */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* gris claro de fondo */
+    margin: 0;
+    padding: 0;
+}
+
+/* titulo main */
+h2.forms {
+    color: white;
+    background-color: red;
+    text-align: center;
+    border: 1px solid #a80303;
+    padding: 15px 0px;
+    margin: 0px;
+}
+
+/* contenedor principal*/
+div.formsFondo {
+    background-color: white;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    max-width: 900px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* subtitulos */
+h3.subtitulo {
+    color: red;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid #a80303;
+    padding-bottom: 5px;
+}
+
+/* imagen de ruleta */
+.ruleta-img {
+    width: 70%;
+    max-width: 500px;
+    border: 2px solid #a80303;
+    border-radius: 10px;
+    display: block;
+    margin: 10px auto;
+}
+
+/* estado del juego */
+p.estado {
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+    background-color: #bf0404; /* rojo oscuro */
+    border-radius: 5px;
+    display: inline-block;
+    padding: 8px 15px;
+}
+
+/* saldo */
+p.saldo {
+    font-size: 20px;
+    font-weight: bold;
+    color: green;
+    background-color: #e1fbe1;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+/* lsita de números */
+ul.lista {
+    text-align: left;
+    padding-left: 40px;
+    margin: 10px 0px 20px 0px;
+    color: black;
+}
+
+.rojo { color: red; font-weight: bold; }
+.negro { color: black; font-weight: bold; }
+.verde { color: green; font-weight: bold; }
+
+/* tabla de apuesta */
+table.tabla-apuesta {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+table.tabla-apuesta th, 
+table.tabla-apuesta td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+table.tabla-apuesta th {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
+
+/* boton de volver */
+div.espacio {
+    padding-top: 20px;
+    text-align: center;
+}
+
+button.submit {
+    color: white;
+    background-color: #6457d3; /* morado */
+    border-radius: 20px;
+    padding: 12px 25px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button.submit:hover {
+    background-color: rgb(80, 123, 201);
+}
