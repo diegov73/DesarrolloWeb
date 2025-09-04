@@ -180,19 +180,24 @@ div.tituloModulo{
 }
 
 /*Transacciones*/
- h1 {
+ .TituloPerfil h1 {
     text-align: center;
     margin-top: 20px;
     font-size: 28px;
 }
- h2 {
+ .balance h2,
+.transacciones h2,
+.ruleta h2,
+.userInfo h2{
     text-align: center;
     color: #eb3926; 
     margin-top: 20px;
     font-size: 28px;
 }
 
- h3 {
+ .deposito h3,
+.retiro h3, 
+.historialTransacciones h3{
     text-align: center;
     color: #ffffff; 
     margin-top: 20px;
@@ -250,4 +255,5 @@ div.tituloModulo{
     border-bottom: 1px solid #444;
     color: #fff;
 }
+
 
