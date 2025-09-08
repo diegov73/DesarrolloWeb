@@ -1,7 +1,122 @@
-/*clases modificadas para logIn y signUp. se espera que tambien sirva para
-el menu para ingresar y retirar dinero. forms significa formulario*/
+ul.barraSuperior{
+    list-style-type: none;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    overflow: hidden;
+    border: 1px solid #a80303;
+}
+li.izq{
+    float: left;
+    padding: 10px 10px;
+    text-align: center;
+    color: white;
+}
 
-h2.forms{
+li.cen{
+    padding: 10px 10px;
+    text-align: center;
+}
+
+li.der{
+    float: right;
+    padding: 10px 10px;
+    text-align: center;
+}
+
+div.fondoMain{
+    background-color: white;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    max-width: 900px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    text-align: left;
+}
+
+button {
+    background-color: #e74c3c;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #c0392b;
+}
+
+ul.rr-lista {
+    text-align: left;
+    padding-left: 40px;
+    margin: 10px 0px 20px 0px;
+    color: black;
+}
+
+/* Imagen ruleta */
+.ruleta-img {
+    width: 70%;
+    max-width: 500px;
+    border: 2px solid #a80303;
+    border-radius: 10px;
+    display: block;
+    margin: 10px auto;
+}
+
+/* Estado del juego */
+p.rr-estado {
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+    background-color: #bf0404;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 8px 15px;
+}
+
+/* Saldo */
+p.rr-saldo {
+    font-size: 20px;
+    font-weight: bold;
+    color: green;
+    background-color: #e1fbe1;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+/* Colores números */
+.rojo { color: red; font-weight: bold; }
+.negro { color: black; font-weight: bold; }
+.verde { color: green; font-weight: bold; }
+
+/* Tabla apuestas */
+
+table.rr-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+table.rr-tabla th, 
+table.rr-tabla td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+table.rr-tabla th {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
+
+p.rr-texto {
+    text-align: left;
+    padding: 10px 20px;
+    color: black;
+}
+h2.rr-titulo {
     color: white;
     background-color: red;
     text-align: center;
@@ -10,104 +125,48 @@ h2.forms{
     margin: 0px;
 }
 
-p.forms{
-    text-align: left;
-    padding-left: 20px;
+h3.rr-subtitulo {
+    color: red;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid #a80303;
+    padding-bottom: 5px;
 }
-
-div.formsFondo{
-    background-color: rgb(235, 235, 235);
-    padding-top: 15px;
-    margin-top: 0px;
-    text-align: center;
+ .Saldo,
+ .deposito,
+.retiro,
+ .historialTransacciones {
+    background: #f31212; 
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.5);
+    max-width: 800px;
+    color: #fff;
 }
-
-div.espacio{
-    padding-bottom: 10px;
+ .deposito input,
+ .retiro input {
+    width: 90%;
+    background: #ffffff;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 8px;
 }
-
-input:hover{
-    background-color: lightgrey;
+ .deposito button,
+ .retiro button {
+    background-color: #e74c3c;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    margin-top: 8px;
 }
-
-button.submit{
-    color: white;
-    background-color: #6457d3;
-    border-radius: 15px;
-}
-
-button.submit:hover{
-    background-color: rgb(80, 123, 201);
-}
-
-/*barra superior horizontal*/
-
-ul.home{
-    list-style-type: none;
-    font-size: 20px;
-    color: white;
-    background-color: red;
-    overflow: hidden;
-    border: 1px solid #a80303;
-}
-
-li.homeLeft{
-    float: left;
-    padding: 10px 10px;
-    text-align: center;
-}
-
-li.homeRight{
-    float: right;
-    padding: 10px 10px;
-    text-align: center;
-}
-    li:hover {
-        background-color: #bf0404;
-    }
-
-#wallet{
-    background-color: rgb(3, 151, 3);
-}
-    #wallet:hover{
-        background-color: green;
-    }
-
-#logIn{
-    background-color: white;
-}
-    #logIn:hover{
-        background-color: rgb(206, 206, 206);
-    }
-
-    a.logIn{
-        color: black;
-    }
-
-/*clases para landingSite*/
-
-p.allIn{
-    font-size: 100px;
-    margin: 12px 0px;
-    padding-left: 25px;
-}
-
-H2.sub{
-    font-size: 40px;
-    margin: 15px 0px;
-    padding-left: 25px;
-}
-
-div.contenedor{
-    display: flex;
-    padding-left: 25px;
-    gap:130px;
-}
-
-div.modulo{
-
-}
-
-div.tituloModulo{
-
+.deposito button:hover,
+ .retiro button:hover {
+    background-color: #c0392b;
 }
