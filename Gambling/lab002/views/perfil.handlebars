@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>  </head>
+  <body>
+  <h2>Bienvenido {{username}} </h2> <br>
+  <h3>Su saldo $ {{monto}} </h3> <br>
+  <h3 class="rr-subtitulo">Últimas 5 apuestas </h3> 
+       <!--falta tabla ultimas transacciones, boton de eliminar cuenta y boton de cerrar sesion-->
+
+  <form method="post" action="logOut">
+    <button type="submit">cerrar sesion</button>
+  </form>
+  <form method="post" action="deleteAccount">
+    <button type="submit">borrar cuenta</button>
+  </form>
+
+  <a class="enlace" href="ruleta.handlebars"> <li class="izq">volver a ruleta</li></a>
+  </body>
+</html>
