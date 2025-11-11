@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <p><a href="/wallet">wallet</a>, <a href="/perfil">perfil</a></p>
+    <head>
+        <meta charset="utf-8">  
+        <link rel="stylesheet" href="styleTrue.css">  
+    </head>
+
     <body>
         <ul class="barraSuperior">
        <!--<a class="enlace" href="landingSite.html"> <li class="izq"> Volver </li></a>-->
@@ -53,13 +57,14 @@
             <button class="submit">Apostar</button>
             </div>
             </div>
-            <div id="total-bet">Total apostado: <span id="total-amount"></span></div>
+            <div id="total-bet">Total apostado:</div>
+            <h3 id="totalAmount"></h3>
             </div>
         </div>
     </div>     
         
     <br> <br> <br> <br> <br>  <br> <br> <br>   
-        <h3 class="rr-subtitulo">Saldo disponible</h3>
+        <h3 class="rr-subtitulo">Saldo disponible:</h3>
         <p class="rr-saldo">{{saldo}}</p>  
 
         <h3 class="rr-subtitulo">Últimos 5 números ganadores</h3>
@@ -71,11 +76,12 @@
 
         <h3 class="rr-subtitulo">Últimas 5 apuestas</h3> <!--Tabla ultimas apuestas-->
         <table class="rr-tabla">
-            <tr>
+            <thead> <tr>
                 <th>Números Apostados</th>
                 <th>Monto</th>
                 <th>Variación Saldo</th>
-            </tr>
+            </tr> </thead>
+            <tbody>
             {{#each ultimasApuestas}}
                 <tr>
                     <td>{{this.numeros}}</td>
@@ -83,13 +89,14 @@
                     <td>{{this.variacion}}</td>
                 </tr>
             {{/each}}
+            </tbody>
         </table>
 
-         <form id="resultado-form" action="add" method="post">
+        <form id="resultado-form" action="addRuleta" method="post">
             <input type="hidden" id="numeroGanador" name="numeroGanador">
             <input type="hidden" id="colorGanador" name="colorGanador">
             <input type="hidden" id="tipoApuesta" name="tipoApuesta">
-            <input type="hidden" id="totalApuestado" name="totalApuestado">
+            <input type="hidden" id="totalApostado" name="totalApostado">
             <input type="hidden" id="saldoGanado" name="saldoGanado">
             <input type="hidden" id="variacion" name="variacion">
         </form>
@@ -97,3 +104,4 @@
     <script src="ruleta.js"></script>
     </body>
 </html>
+
