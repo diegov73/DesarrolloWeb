@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.3",
+    "mongodb": "^7.0.0",
+    "mongoose": "^8.19.3"
+  }
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">  
+        <link rel="stylesheet" href="styleTrue.css">  
+    </head>
+
+    <body>
+        <ul class="barraSuperior">
+       <!--<a class="enlace" href="landingSite.html"> <li class="izq"> Volver </li></a>-->
+        <li class="cen">Mesa de Ruleta Europea</li>
+       </ul>
+
+    <div class="TotalRuleta">
+        <div class="container">
+            <canvas id="roulette" width="450" height="450"></canvas>
+        <br>   
+            <button id="spin-btn">Girar</button>
+            <h2 id="resultNumber"></h2>
+            <h2 id="resultMoney"></h2>
+        </div>
+
+        <div class="containerRuleta">
+            <div class="table" id="tablaRuleta"></div>
+            <div class="controls">
+            <button id="clear-btn">Limpiar apuestas</button>
+                
+                <div class="outside-bets" id="outsideBets">
+                <!-- Seccion para docenas y columnas -->
+                <div class="dozens-columns-group">
+                    <div class="cell bet-dozen" data-bet="1st12">Primeros 12 números</div>
+                    <div class="cell bet-dozen" data-bet="2nd12">Segundos 12 números</div>
+                    <div class="cell bet-dozen" data-bet="3rd12">Ultimos 12 números</div>
+                    <div class="cell bet-column" data-bet="col1">2 to 1 (Col 1)</div>
+                    <div class="cell bet-column" data-bet="col2">2 to 1 (Col 2)</div>
+                    <div class="cell bet-column" data-bet="col3">2 to 1 (Col 3)</div>
+                </div>
+                
+                <!-- Seccion para apuestas exteriores simples -->
+                <div class="simple-bets-group">
+                    <div class="cell bet-simple" data-bet="low">1-18</div>
+                    <div class="cell bet-simple" data-bet="high">19-36</div>
+                    <div class="cell bet-simple" data-bet="even">Par</div>
+                    <div class="cell bet-simple" data-bet="red">Rojo</div> 
+                    <div class="cell bet-simple" data-bet="black">Negro</div> 
+                    <div class="cell bet-simple" data-bet="odd">Impar</div>         
+                </div>
+            </div>
+
+            <div id="selected-numbers">Apuestas: <span id="numbers-list"></span></div>
+        <br>
+            <label>Valor de las fichas: </label>
+            <div class="espacio">
+            <input type="number" placeholder="Una ficha..." id="valor-ficha">
+            <div class="espacio">
+            <br>
+            <button class="submit">Apostar</button>
+            </div>
+            </div>
+            <div id="total-bet">Total apostado: <span id="total-amount"></span></div>
+            </div>
+        </div>
+    </div>     
+        
+    <br> <br> <br> <br> <br>  <br> <br> <br>   
+        <h3 class="rr-subtitulo">Saldo disponible:</h3>
+        <p class="rr-saldo">{{saldo}}</p>  
+
+        <h3 class="rr-subtitulo">Últimos 5 números ganadores</h3>
+        <ul class="rr-lista">
+            {{#each ultimosNumeros}}  
+                <li><span class="{{this.color}}">{{this.numero}} ({{this.colorTexto}})</span></li>
+            {{/each}}
+        </ul>
+
+        <h3 class="rr-subtitulo">Últimas 5 apuestas</h3> <!--Tabla ultimas apuestas-->
+        <table class="rr-tabla">
+            <thead> <tr>
+                <th>Números Apostados</th>
+                <th>Monto</th>
+                <th>Variación Saldo</th>
+            </tr> </thead>
+            <tbody>
+            {{#each ultimasApuestas}}
+                <tr>
+                    <td>{{this.numeros}}</td>
+                    <td>{{this.monto}}</td>
+                    <td>{{this.variacion}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+
+        <form id="resultado-form" action="addRuleta" method="post">
+            <input type="hidden" id="numeroGanador" name="numeroGanador">
+            <input type="hidden" id="colorGanador" name="colorGanador">
+            <input type="hidden" id="tipoApuesta" name="tipoApuesta">
+            <input type="hidden" id="totalApostado" name="totalApostado">
+            <input type="hidden" id="saldoGanado" name="saldoGanado">
+            <input type="hidden" id="variacion" name="variacion">
+        </form>
+    <script src="ruleta.js"></script>
+    </body>
+</html>
