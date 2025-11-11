@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => { //esto asegura que el DOM este cargado antes de ejecutar el script
-  const source = document.getElementById('template').innerHTML;
 
 const roulette = document.getElementById("roulette");
 const ctx = roulette.getContext("2d");
@@ -7,11 +6,17 @@ const resultMoneyDiv = document.getElementById("resultMoney");
 const resultNumberDiv = document.getElementById("resultNumber");
 const spinBtn = document.getElementById("spin-btn");
 
-
 const numeros = Array.from({ length: 37 }, (_, i) => i); // 0–36
 let girando = false;
-let saldo = document.getElementById("ingresos");
+let saldo = 1000; //saldo inicial para la prueba
 let apuestas = [];
+let ultimosNumeros = [];
+let ultimasApuestas = [];
+
+const saldoElement = document.querySelector('.rr-saldo'); //se sincroniza el saldo
+  if (saldoElement) {  //verifica que exista el elemento
+    saldoElement.textContent = saldo; //se actualiza 
+  }
 
 //FUNCIONES DE COLOR
 function esRojo(n) {
@@ -24,7 +29,6 @@ function esNegro(n) {
 function RuletaVision() {
   const radio = roulette.width /2;
   const angulo = (2 * Math.PI) / numeros.length;
-
 
   numeros.forEach((n, i) => {
     ctx.beginPath();
@@ -52,6 +56,7 @@ spinBtn.addEventListener("click", () => {
   }
 
   const totalApostado = valorFicha * bets.size;
+  totalAmount.innerHTML=  `${totalApostado}`;
    if (totalApostado > saldo) { //error saldo/dinero
       resultMoneyDiv.innerHTML = '<span style="color: red; font-weight: bold;">Error: Saldo insuficiente </span>';
       girando = false;
@@ -81,14 +86,17 @@ spinBtn.addEventListener("click", () => {
     roulette.style.transition = "none";
     roulette.style.transform = "rotate(0deg)";
     resultNumberDiv.innerHTML = `Número ganador: <span style="color: ${colorGanador}; font-weight: bold;">${numeroGanador} </span>`
-  calcularGanancias(numeroGanador, colorGanador);
-  setTimeout(reinicio, 20000); //reinicio despues de mostrar resultados, 20s
+    const {ganancias, variacion, betType} = calcularGanancias(numeroGanador, colorGanador, valorFicha, totalApostado); //retorna valores
+    actualizarHistoricos(numeroGanador, colorGanador, totalApostado, variacion);
+    let tipoApuesta = betType || 'Ninguna';
+    setFormValues(numeroGanador, colorGanador, totalApostado, ganancias, variacion, tipoApuesta); //envia el formulario
+    setTimeout(reinicio, 15000); //reinicio despues de mostrar resultados, 15s
   }, duracion);  
 });
 
 //INICIO TABLA
 //NUMERO EN LA TABLA
-const listaNumero = Array.from({ length: 37 }, (_, i) => i); // 0 a 36
+const listaNumero = Array.from({ length: 37 }, (_, i) => i); //0 a 36
 
 //DETERMINAR COLOR DE CADA NUMERO
 function getColor(num) {
@@ -103,7 +111,6 @@ let bets = new Set();
 const table = document.getElementById('tablaRuleta');
 const clearBtn = document.getElementById('clear-btn');
 const numbersList = document.getElementById('numbers-list');
-const totalAmount = document.getElementById('total-amount');
 
 //VALOR DE LA FICHA
 const valor = document.getElementById('valor-ficha');
@@ -171,30 +178,28 @@ clearBtn.addEventListener('click', () => {
 //VISTA APUESTAS
 function actualizarVista() {
   const lista = Array.from(bets).sort((a, b) => a - b);
-  numbersList.textContent = lista.length ? lista.join(', ') : 'No hay apuestas';
+  numbersList.textContent = lista.length ? lista.join(', ') : 'No hay apuestas';
 }
 
 //INICIO PAGO DE LAS APUESTAS
-function calcularGanancias(numeroGanador, colorGanador) {
-  const valorFicha = parseInt(valor.value, 10);
-  
+function calcularGanancias(numeroGanador, colorGanador, valorFicha, totalApostado) {
   let ganancias = 0;
-  let totalApostado= valorFicha * bets.size;
-
+  let betTypes = [];
 bets.forEach((key) => {  //APUESTAS A NUMEROS
       if (key.startsWith('num-')) {
         const apuesta = parseInt(key.split('-')[1], 10);
         if (apuesta === numeroGanador) {
           ganancias += valorFicha * 36; 
+          betTypes.push('simple');
         }
       }
     });
 
  bets.forEach((key) => { //APUESTAS EXTERIORES
       if (key.startsWith('bet-')) {
-        const betType = key.split('-')[1];
+        const betTypeA = key.split('-')[1];
         let payout = 0;
-        let matches = false;
+        let matches = false; //si la apuesta exterior se realizo, es true
 
         // Apuestas simples 
         if (betType === 'red' && colorGanador === 'red') { payout = 1; matches = true; }
@@ -204,7 +209,7 @@ bets.forEach((key) => {  //APUESTAS A NUMEROS
         else if (betType === 'low' && numeroGanador >= 1 && numeroGanador <= 18) { payout = 1; matches = true; }
         else if (betType === 'high' && numeroGanador >= 19 && numeroGanador <= 36) { payout = 1; matches = true; }
 
-        // Docenas
+        // Docenas 
         else if (betType === '1st12' && numeroGanador >= 1 && numeroGanador <= 12) { payout = 2; matches = true; }
         else if (betType === '2nd12' && numeroGanador >= 13 && numeroGanador <= 24) { payout = 2; matches = true; }
         else if (betType === '3rd12' && numeroGanador >= 25 && numeroGanador <= 36) { payout = 2; matches = true; }
@@ -216,15 +221,21 @@ bets.forEach((key) => {  //APUESTAS A NUMEROS
         if (betType === 'col1' && col1Nums.includes(numeroGanador)) { payout = 2; matches = true; }
         else if (betType === 'col2' && col2Nums.includes(numeroGanador)) { payout = 2; matches = true; }
         else if (betType === 'col3' && col3Nums.includes(numeroGanador)) { payout = 2; matches = true; }
-  if (matches) {
+ 
+      if (matches) {
     ganancias += valorFicha * (payout + 1);
+    betTypes.push(betTypeA);
   }
+}
+});
 
 saldo += ganancias;
+ if (saldoElement) saldoElement.textContent = saldo; //Actualiza el saldo 
 const variacion = ganancias - totalApostado;
   let colorVariacion = variacion >= 0 ? 'green' : 'red';
   resultMoneyDiv.innerHTML = `Ganancias: <span style="color: green; font-weight: bold;">${ganancias}</span><br>Pérdida/Ganancia neta: <span style="color: ${colorVariacion}; font-weight: bold;">${variacion}</span>`;
-  return { ganancias, variacion };
+  const betType = betTypes.join(', ');
+  return {ganancias, variacion, betType};
 }
  
 //ACTUALIZAR ultimas apuestas y numeros
@@ -237,13 +248,34 @@ const variacion = ganancias - totalApostado;
     const numerosApostados = Array.from(bets).join(', ');
     ultimasApuestas.unshift({ numeros: numerosApostados, monto: totalApostado, variacion });
     if (ultimasApuestas.length > 5) ultimasApuestas.pop();
+
+    const ultimosList=document.querySelector('.rr-lista');
+    if (ultimosList) {
+    ultimosList.innerHTML = ultimosNumeros.map(item => `<li><span class="${item.color}">${item.numero} (${item.colorTexto})</span></li>`).join('');
   }
 
-    // Popula el formulario (por si usas submit manual)
+//para ultimasApuestas 
+    const ultimasTableBody = document.querySelector('.rr-tabla tbody');
+    if (ultimasTableBody) {
+      ultimasTableBody.innerHTML = ultimasApuestas.map(apuesta => `
+        <tr>
+          <td>${apuesta.numeros}</td>
+          <td>${apuesta.monto}</td>
+          <td>${apuesta.variacion}</td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  //para el formulario 
+  let saldoGanado = 0; 
+
+  //setea valores y envia si es necesario 
+  function setFormValues(numeroGanador, colorGanador, totalApostado, saldoGanado, variacion) {
     document.getElementById('numeroGanador').value = numeroGanador;
     document.getElementById('colorGanador').value = colorGanador;
     document.getElementById('tipoApuesta').value = tipoApuesta;
-    document.getElementById('totalApostado').value = totalApostado;
+    document.getElementById('totalApuestado').value = totalApostado; 
     document.getElementById('saldoGanado').value = saldoGanado;
     document.getElementById('variacion').value = variacion;
   }
@@ -259,3 +291,4 @@ function reinicio (){
   resultMoneyDiv.innerHTML = '';
   resultNumberDiv.innerHTML = '';
 }
+}); //
