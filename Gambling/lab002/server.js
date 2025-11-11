@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const { engine } = require('express-handlebars');
@@ -14,11 +15,12 @@ app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 //Almacenamientos de usuarios a traves de la base de datos y atributos de los mismos
 const UsuarioSchema = new mongoose.Schema({
   username: {
     type: String,
-    require: true,
+    required: true,
     unique: true
   },
   password: {
@@ -51,6 +53,26 @@ const UsuarioSchema = new mongoose.Schema({
 
 const Usuario = mongoose.model('Usuario', UsuarioSchema);
 
+
+// verificar si el usuario tiene sesión activa mediante cookie
+app.use((req, res, next) => {
+  const ID = req.cookies.ID;
+
+  // Si el usuario ya tiene una cookie y entra al inicio, login o signup → redirigir a ruleta
+  if (ID && (req.path === '/' || req.path === '/logIn' || req.path === '/signUp')) {
+    return res.redirect('/ruleta');
+  }
+
+  // Si el usuario NO tiene cookie e intenta entrar a rutas restringidas → enviarlo al inicio
+  const rutasProtegidas = ['/perfil', '/wallet', '/ruleta'];
+  if (!ID && rutasProtegidas.includes(req.path)) {
+    return res.redirect('/');
+  }
+
+  // Si pasa las verificaciones, continuar con la siguiente ruta
+  next();
+});
+
 //logica de los hadlebars
 app.get('/', (req, res) => {
     res.render('landSite');
@@ -61,24 +83,44 @@ app.get('/signUp', (req, res) => {
     res.render('signUp');
 });
 
-app.post('/signUp', async(req, res)=>{
-    const{username, password} = req.body;
+app.post('/signUp', async (req, res) => {
+  const { username, password, confirmPassword } = req.body;
 
-    try{
+  try {
+    // Validaciones de contraseña
+    const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+    if (!regex.test(password)) {
+      return res.status(400).render('signUp', {
+        error: 'La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.'
+      });
+    }
+
+    // Confirmar contraseñas
+    if (password !== confirmPassword) {
+      return res.status(400).render('signUp', {
+        error: 'Las contraseñas no coinciden.'
+      });
+    }
+
+    // Crear usuario nuevo
     const nuevoUsuario = new Usuario({ username, password });
     await nuevoUsuario.save();
-    
-    res.cookie('ID', nuevoUsuario._id.toString());
-    
-    res.status(201).render('welcome', {usuario:username});
-    }
 
-  catch(error){
-    if(error.code === 11000){
-      res.status(400).send('El nombre de usuario ya existe');
+    res.cookie('ID', nuevoUsuario._id.toString());
+    res.status(201).render('welcome', { usuario: username });
+
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).render('signUp', {
+        error: 'El nombre de usuario ya existe. Elige otro.'
+      });
     }
+    console.error('Error en registro:', error);
+    res.status(500).render('signUp', {
+      error: 'Error interno del servidor. Intenta más tarde.'
+    });
   }
-})
+});
 
 //logIn
 app.get('/logIn', (req,res)=>{
@@ -122,57 +164,110 @@ app.get('/ruleta', async(req, res)=>{
     }
 })
 
-//wallet
-app.get('/wallet', async(req, res)=>{
-    const saldo = req.cookies.saldo ?? '0';
-    
-    res.render('wallet', {saldo:saldo})
-})
-
-app.post('/wallet', async(req,res)=>{
-  try{
+//wallet  muestra saldo e historial
+app.get('/wallet', async (req, res) => {
+  try {
     const ID = req.cookies.ID;
-    const add = req.body.add;
-    const subtrac = req.body.subtrac;
-    if(add){ //añadir fondos
-        const transaccion={
-          tipo: 'deposito',
-          monto: add
-        };
-        const Update = await Usuario.findByIdAndUpdate(
-          ID,
-            {
-              $push: {historial:transaccion},
-              $inc: {balance:add}
-            },
-            {new: true}
-        )
-        res.cookie('saldo', Update.balance.toString());
-        res.redirect('/wallet');
-    };
-    if(subtrac){ //retirar fondos
-      const transaccion={
-          tipo: 'retiro',
-          monto: subtrac
-        }
+    const usuario = await Usuario.findById(ID);
+    if (!usuario) {
+      return res.status(400).send('Usuario no encontrado');
+    }
 
-        const Update = await Usuario.findByIdAndUpdate(
-          ID,
-            {
-              $push: {historial:transaccion},
-              $inc: {balance:-subtrac}
-            },
-            {new: true}
-        )
-        res.cookie('saldo', Update.balance.toString());
-        res.redirect('/wallet');
-    };
+    // Ordenar historial: transacciones más recientes primero
+    const historialOrdenado = [...usuario.historial].reverse();
+
+    res.render('wallet', {
+      saldo: usuario.balance,
+      historial: historialOrdenado
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cargar wallet');
   }
-  catch(error){
-      console.error(error);
-      res.status(500).send('error del servidor');
+});
+
+//manejar depósitos y retiros
+app.post('/wallet', async (req, res) => {
+  try {
+    const ID = req.cookies.ID;
+    const add = Number(req.body.add);
+    const subtrac = Number(req.body.subtrac);
+
+    const usuario = await Usuario.findById(ID);
+    if (!usuario) {
+      return res.status(400).render('wallet', { saldo: 0, mensaje: 'Usuario no encontrado' });
+    }
+
+    //  Depositar dinero
+    if (add && add > 0) {
+      const transaccion = { tipo: 'deposito', monto: add };
+
+      const update = await Usuario.findByIdAndUpdate(
+        ID,
+        {
+          $push: { historial: transaccion },
+          $inc: { balance: add }
+        },
+        { new: true }
+      );
+
+      res.cookie('saldo', update.balance.toString());
+
+      const historialOrdenado = [...update.historial].reverse();
+      return res.render('wallet', {
+        saldo: update.balance,
+        historial: historialOrdenado,
+        mensaje: `Se agregaron $${add}`
+      });
+    }
+
+    // Retirar dinero (verificación de saldo)
+    if (subtrac && subtrac > 0) {
+      if (usuario.balance < subtrac) {
+        const historialOrdenado = [...usuario.historial].reverse();
+        return res.render('wallet', {
+          saldo: usuario.balance,
+          historial: historialOrdenado,
+          mensaje: 'Saldo insuficiente. No puedes retirar más de lo que tienes.'
+        });
+      }
+
+      const transaccion = { tipo: 'retiro', monto: subtrac };
+
+      const update = await Usuario.findByIdAndUpdate(
+        ID,
+        {
+          $push: { historial: transaccion },
+          $inc: { balance: -subtrac }
+        },
+        { new: true }
+      );
+
+      res.cookie('saldo', update.balance.toString());
+
+      const historialOrdenado = [...update.historial].reverse();
+      return res.render('wallet', {
+        saldo: update.balance,
+        historial: historialOrdenado,
+        mensaje: `Se retiraron $${subtrac}`
+      });
+    }
+
+    // Si no se ingresó ningún valor válido
+    const historialOrdenado = [...usuario.historial].reverse();
+    res.status(400).render('wallet', {
+      saldo: usuario.balance,
+      historial: historialOrdenado,
+      mensaje: 'Ingresa un monto válido para depositar o retirar.'
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).render('wallet', { saldo: 0, mensaje: 'Error del servidor' });
   }
-})
+});
+
+
 
 //perfil
 app.get("/perfil", async(req,res)=>{
