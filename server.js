@@ -94,42 +94,60 @@ app.use((req, res, next) => {
 });
 
 //logica de los hadlebars
-app.get('/', (req, res) => {
-    res.render('landSite');
+app.get('/', async(req, res) => {
+  try{
+    const ID = req.cookies.ID;
+    const usuario = await Usuario.findById(ID);
+    if(usuario){
+      const saldo = usuario.balance?? "0";
+      const nombre = usuario.username;
+      res.render('welcome', {saldo:saldo, nombre:nombre});
+    }
+    else{
+      res.render('landSite', {saldo:"---", nombre:"Cuenta"});
+    }
+  }
+  catch(error){
+    console.error(error);
+    res.status(500).send('error del servidor')
+  }
 });
 
 // SIGN UP
 app.get('/signUp', (req, res) => {
-  res.render('signUp');
+  res.render('signUp', {saldo:"---", nombre:"Cuenta"});
 });
 
 app.post('/signUp', async (req, res) => {
-  const { username, password, retypePassword } = req.body;
+  const { username, password, confirmPassword} = req.body;
 
   try {
     // Validación de contraseña segura
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
 
     if (!regex.test(password)) {
-      return res.render('signUp', {
-        mensaje:
-          'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*()_+).'
-      });
+      return res.send(
+          'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*()_+).<br> Por favor intentalo de nuevo');
     }
 
     // Validar que ambas contraseñas coincidan
-    if (password !== retypePassword) {
-      return res.render('signUp', { mensaje: 'Las contraseñas no coinciden.' });
+    if (password === confirmPassword) {
+      const nuevoUsuario = new Usuario({ username, password });
+      await nuevoUsuario.save();
+
+      const saldo = nuevoUsuario.balance?? "0";
+      const nombre = nuevoUsuario.username;
+      // Guardar cookie
+      res.cookie('ID', nuevoUsuario._id.toString());
+      res.status(201).render('welcome', {usuario:username, nombre:nombre, saldo:saldo});
     }
-
+    
     // Crear nuevo usuario
-    const nuevoUsuario = new Usuario({ username, password });
-    await nuevoUsuario.save();
-
-    // Guardar cookie
-    res.cookie('ID', nuevoUsuario._id.toString());
-    res.status(201).render('welcome', { usuario: username });
-  } catch (error) {
+    else{
+      return res.send('Las contraseñas no coinciden.<br> Por favor intelo de nuevo');
+    }
+  }
+   catch (error) {
     if (error.code === 11000) {
       return res.render('signUp', { mensaje: 'El nombre de usuario ya existe.' });
     }
@@ -140,7 +158,7 @@ app.post('/signUp', async (req, res) => {
 
 //logIn
 app.get('/logIn', (req,res)=>{
-  res.render('logIn');
+  res.render('logIn', {saldo:"---", nombre:"Cuenta"});
 })
 
 app.post('/logIn', async(req, res) => {
@@ -148,12 +166,13 @@ app.post('/logIn', async(req, res) => {
 
   try {
     const usuario = await Usuario.findOne({ username, password })
-
+    const nombre = usuario.username;
+    const saldo = usuario.balance;
     if (!usuario) {
       return res.send('Credenciales inválidas. <a href="/login">Intentar de nuevo</a>')
     }
     res.cookie('ID', usuario._id.toString())
-    res.render('welcome', {usuario:username})
+    res.render('welcome', {nombre:nombre, saldo:saldo})
   } catch (err) {
     console.error('Error al buscar usuario:', err)
     res.send('Error interno del servidor')
@@ -293,10 +312,10 @@ app.get("/perfil", async(req,res)=>{
     const ID = req.cookies.ID;
       const usuario = await Usuario.findById(ID);
 
-      const saldo = usuario.balance? usuario.balance: '0';
+      const saldo = usuario.balance?? '0';
       const nombre = usuario.username;
       
-      res.render('perfil', {monto:saldo, nombre:nombre})
+      res.render('perfil', {saldo:saldo, nombre:nombre})
   }
   catch(error){
         console.error(error);

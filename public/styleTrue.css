@@ -1,3 +1,4 @@
+/*barra superio*/
 ul.barraSuperior{
     list-style-type: none;
     font-size: 20px;
@@ -23,6 +24,81 @@ li.der{
     padding: 10px 10px;
     text-align: center;
 }
+
+#saldo{
+  background-color:rgb(15, 140, 15);
+  color: white;
+}
+#saldo:hover{
+  background-color: rgb(12, 102, 12);
+}
+
+#cuenta{
+  background-color: white;
+  color: black;
+}
+#cuenta:hover{
+  background-color: rgb(207, 207,207);
+}
+
+a.enlace{
+  color:white;
+}
+
+/*barra superio fin*/
+
+/*landingSite*/
+
+a.link{
+    background-color: rgb(0, 123, 255);
+    text-align: center;
+    align-items: center;
+    color: white;
+    width: 230px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 0 10px;
+}
+
+a.link:hover{
+  background-color: rgb;
+}
+
+div.contenedor{
+    margin-top: 50px;
+    display: flex;
+    padding-left: 25px;
+    gap:70px;
+}
+
+.contenedor > div{
+    width: 230px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 0 10px;
+}
+
+.contenedor > div:hover{
+    background-color: rgba(0, 0, 0, 0.027);
+}
+
+.contenedor > div > p{
+    padding: 0 10px;
+}
+
+H1.allIn{
+    font-size: 150px;
+    margin: 12px 0px;
+    padding: 0 20px;
+}
+
+H2.sub{
+    font-size: 40px;
+    margin: 15px 0px;
+    padding-left: 25px;
+}
+/*landingSite fin*/
+
 
 div.fondoMain{
     background-color: white;
