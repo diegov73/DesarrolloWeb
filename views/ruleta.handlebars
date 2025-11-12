@@ -6,13 +6,6 @@
     </head>
 
     <body>
-        <ul class="barraSuperior">
-       <!--<a class="enlace" href="landingSite.html"> <li class="izq"> Volver </li></a>-->
-        <li class="izq">Mesa de Ruleta Europea</li>
-        <a class="enalce" href="perfil"><li class="der">{{nombre}}</li></a>
-        <a class="enalce" href="wallet"><li class="der">{{saldo}}$</li></a>
-       </ul>
-
     <div class="TotalRuleta">
         <div class="container">
             <canvas id="roulette" width="450" height="450"></canvas>
@@ -82,9 +75,9 @@
             <tbody>
             {{#each ultimasApuestas}}
                 <tr>
-                    <td>{{thisnumeros}}</td>
-                    <td>{{thismonto}}</td>
-                    <td>{{thisvariacion}}</td>
+                    <td>{{this.numeros}}</td>
+                    <td>{{this.monto}}</td>
+                    <td>{{this.variacion}}</td>
                 </tr>
             {{/each}}
             </tbody>

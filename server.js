@@ -175,7 +175,7 @@ app.get('/ruleta', async(req, res)=>{
     }
 })
 /*
-pp.post('/ruleta', async(req,res)=>{
+app.post('/ruleta', async(req,res)=>{
   try{
 
   }
@@ -187,15 +187,17 @@ app.get('/wallet', async (req, res) => {
   try {
     const ID = req.cookies.ID;
     const usuario = await Usuario.findById(ID);
-    const saldo = usuario.balance;
+
     if (!usuario) {
       return res.status(400).send('Usuario no encontrado');
     }
-
+    
+    const saldo = usuario.balance;
+    const nombre = usuario.username; 
     // Ordenar historial: transacciones más recientes primero
     const historialOrdenado = [...usuario.historial].reverse();
-
-    res.render('wallet', {saldo: saldo, historial: historialOrdenado});
+    
+    res.render('wallet', {saldo:saldo, nombre:nombre, historial: historialOrdenado});
   } catch (error) {
     console.error(error);
     res.status(500).send('Error al cargar wallet');
@@ -292,9 +294,9 @@ app.get("/perfil", async(req,res)=>{
       const usuario = await Usuario.findById(ID);
 
       const saldo = usuario.balance? usuario.balance: '0';
-      const nombre = usuario.username
+      const nombre = usuario.username;
       
-      res.render('perfil', {monto:saldo, username:nombre})
+      res.render('perfil', {monto:saldo, nombre:nombre})
   }
   catch(error){
         console.error(error);

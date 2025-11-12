@@ -3,18 +3,31 @@
 <head>
     <meta charset='utf-8'>
 </head>
-    <body>
-        <h1>tu saldo es {{saldo}}</h1>
+<body>
+    <form method="post" action="/wallet">
+        Agregar: <input type="number" name="add">
+        <button type="submit">Confirmar</button>
+    </form>
 
-        <form method="post" action="/wallet">
-            Agregar: <input type="number" name="add">
-            <button type="submit">Confirmar</button>
-        </form>
+    <form method="post" action="/wallet">
+        Retirar: <input type="number" name="subtrac">
+        <button type="submit">Confirmar</button>
+    </form>
 
-        <form method="post" action="/wallet">
-            Retirar: <input type="number" name="subtrac">
-            <button type="submit">Confirmar</button>
-        </form>
-        <a href="/ruleta">volver a ruleta</a> 
-    </body>
+    <h2>Historial de transacciones</h2>
+
+    {{#if historial.length}}
+        <ul>
+            {{#each historial}}
+                <li>
+                    {{tipo}} de ${{monto}} — {{fecha}}
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No tienes transacciones aún.</p>
+    {{/if}}
+
+    <a href="/ruleta">Volver a ruleta</a>
+</body>
 </html>

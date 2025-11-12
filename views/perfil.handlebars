@@ -1,35 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset='utf-8'>
-</head>
-<body>
-    <h1>Tu saldo es {{saldo}}</h1>
+  <head>  </head>
+  <body>
+  <h3 class="rr-subtitulo">Últimas 5 apuestas </h3> 
+       <!--falta tabla ultimas transacciones, boton de eliminar cuenta y boton de cerrar sesion-->
 
-    <form method="post" action="/wallet">
-        Agregar: <input type="number" name="add">
-        <button type="submit">Confirmar</button>
-    </form>
+  <form method="post" action="logOut">
+    <button type="submit">cerrar sesion</button>
+  </form>
+  <form method="post" action="deleteAccount">
+    <button type="submit">borrar cuenta</button>
+  </form>
 
-    <form method="post" action="/wallet">
-        Retirar: <input type="number" name="subtrac">
-        <button type="submit">Confirmar</button>
-    </form>
-
-    <h2>Historial de transacciones</h2>
-
-    {{#if historial.length}}
-        <ul>
-            {{#each historial}}
-                <li>
-                    {{tipo}} de ${{monto}} — {{fecha}}
-                </li>
-            {{/each}}
-        </ul>
-    {{else}}
-        <p>No tienes transacciones aún.</p>
-    {{/if}}
-
-    <a href="/ruleta">Volver a ruleta</a>
-</body>
+  <a class="enlace" href="ruleta.handlebars"> <li class="izq">volver a ruleta</li></a>
+  </body>
 </html>
