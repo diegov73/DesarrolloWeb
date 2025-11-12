@@ -8,7 +8,9 @@
     <body>
         <ul class="barraSuperior">
        <!--<a class="enlace" href="landingSite.html"> <li class="izq"> Volver </li></a>-->
-        <li class="cen">Mesa de Ruleta Europea</li>
+        <li class="izq">Mesa de Ruleta Europea</li>
+        <a class="enalce" href="perfil"><li class="der">{{nombre}}</li></a>
+        <a class="enalce" href="wallet"><li class="der">{{saldo}}$</li></a>
        </ul>
 
     <div class="TotalRuleta">
@@ -63,9 +65,6 @@
     </div>     
         
     <br> <br> <br> <br> <br>  <br> <br> <br>   
-        <h3 class="rr-subtitulo">Saldo disponible:</h3>
-        <p class="rr-saldo">{{saldo}}</p>  
-
         <h3 class="rr-subtitulo">Últimos 5 números ganadores</h3>
         <ul class="rr-lista">
             {{#each ultimosNumeros}}  
@@ -83,15 +82,15 @@
             <tbody>
             {{#each ultimasApuestas}}
                 <tr>
-                    <td>{{this.numeros}}</td>
-                    <td>{{this.monto}}</td>
-                    <td>{{this.variacion}}</td>
+                    <td>{{thisnumeros}}</td>
+                    <td>{{thismonto}}</td>
+                    <td>{{thisvariacion}}</td>
                 </tr>
             {{/each}}
             </tbody>
         </table>
 
-        <form id="resultado-form" action="addRuleta" method="post">
+        <form id="resultado-form" action="ruleta" method="post">
             <input type="hidden" id="numeroGanador" name="numeroGanador">
             <input type="hidden" id="colorGanador" name="colorGanador">
             <input type="hidden" id="tipoApuesta" name="tipoApuesta">

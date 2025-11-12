@@ -233,7 +233,7 @@ h3.rr-subtitulo {
 /* Tabla de apuestas */
 .table {
   display: grid;
-  grid-template-columns: 50px repeat(13, 1fr); /*12*/
+  grid-template-columns: 50 px repeat(12, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap: 2px;
   background: #000;
@@ -327,14 +327,14 @@ h3.rr-subtitulo {
   color: #1b0000;
 }
 
-/*contenedor apuestas exteriores */
+/*contenedor apuestas exteriores*/
 #outsideBets {
   display: flex; 
-  justify-content: space-between; /*espacio entre secciones*/
+  justify-content: space-between; /espacio entre secciones/
   gap: 20px;
   padding: 20px; 
-  margin: 20px auto; /*centrado y margen*/
-  max-width: 700px; /*ancho maximo para no estirarse demasiado*/
+  margin: 20px auto; /centrado y margen/
+  max-width: 700px; /ancho maximo para no estirarse demasiado/
 }
 
 /*seccion de docenas y columnas (izquierda)*/
@@ -360,7 +360,3 @@ h3.rr-subtitulo {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
 }
-
-
-
-

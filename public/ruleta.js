@@ -8,7 +8,7 @@ const spinBtn = document.getElementById("spin-btn");
 
 const numeros = Array.from({ length: 37 }, (_, i) => i); // 0–36
 let girando = false;
-let saldo = 1000; //saldo inicial para la prueba
+let saldo; //saldo inicial para la prueba
 let apuestas = [];
 let ultimosNumeros = [];
 let ultimasApuestas = [];

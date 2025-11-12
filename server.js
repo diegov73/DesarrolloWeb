@@ -46,6 +46,26 @@ const UsuarioSchema = new mongoose.Schema({
           type: Date,
           default: Date.now // Guarda la fecha automáticamente
       }
+  }],
+
+  Resultados:[{
+      numeroGanador:{
+        type: Number,
+        required: true,
+      },
+      colorGanador:{
+        type: String,
+        enum:['verde','rojo','negro'],
+        required: true
+      },
+      tipoApueta:{
+        type: String,
+        required: true
+      },
+      saldoGanado:{
+        type: Number,
+        required: true
+      }
   }]
 }, {
   collection: 'Usuario'
@@ -145,26 +165,29 @@ app.get('/ruleta', async(req, res)=>{
     try{
         const ID = req.cookies.ID;
         const usuario = await Usuario.findById(ID);
-        if(!usuario){
-          res.send(`usuario ID: ${ID}`);
-        }
         const saldo = usuario.balance? usuario.balance: '0';
-        
-        res.cookie('saldo', saldo.toString())
-
-        res.render('ruleta', {saldo:saldo})
+        const nombre = usuario.username;
+        res.render('ruleta', {saldo:saldo, nombre:nombre})
     }
     catch(error){
         console.error(error);
         res.status(500).send('error del servidor');
     }
 })
+/*
+pp.post('/ruleta', async(req,res)=>{
+  try{
+
+  }
+})
+*/
 
 //wallet  muestra saldo e historial
 app.get('/wallet', async (req, res) => {
   try {
     const ID = req.cookies.ID;
     const usuario = await Usuario.findById(ID);
+    const saldo = usuario.balance;
     if (!usuario) {
       return res.status(400).send('Usuario no encontrado');
     }
@@ -172,10 +195,7 @@ app.get('/wallet', async (req, res) => {
     // Ordenar historial: transacciones más recientes primero
     const historialOrdenado = [...usuario.historial].reverse();
 
-    res.render('wallet', {
-      saldo: usuario.balance,
-      historial: historialOrdenado
-    });
+    res.render('wallet', {saldo: saldo, historial: historialOrdenado});
   } catch (error) {
     console.error(error);
     res.status(500).send('Error al cargar wallet');
