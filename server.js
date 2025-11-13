@@ -49,29 +49,14 @@ const UsuarioSchema = new mongoose.Schema({
       }
   }],
 
-  Resultados:[{
-      numeroGanador:{
-        type: Number,
-        required: true,
-      },
-      colorGanador:{
-        type: String,
-        enum:['red','green','blue'],
-        required: true
-      },
-      tipoApueta:{
-        type: String,
-        required: true
-      },
-      resultado:{
-        type: Number,
-        required: true
-      },
-      fecha:{
-        type: Date,
-        default: Date.now
-      }
-  }]
+  Resultados: [{
+    numeroGanador: Number,
+    colorGanador: String,
+    tipoApuesta: String, 
+    totalApostado: Number,
+    variacion: Number, 
+    fecha: Date
+}]
 }, {
   collection: 'Usuario'
 });
@@ -184,41 +169,68 @@ app.post('/logIn', async(req, res) => {
   }
 });
 
-//ruleta
 app.get('/ruleta', async(req, res)=>{
-    try{
-        const ID = req.cookies.ID;
-        const usuario = await Usuario.findById(ID);
-        const saldo = usuario.balance? usuario.balance: '0';
-        const nombre = usuario.username;
-        res.render('ruleta', {saldo:saldo, nombre:nombre})
-    }
-    catch(error){
-        console.error(error);
+try{
+  const ID = req.cookies.ID;
+  const usuario = await Usuario.findById(ID);
+
+  if (!usuario) {
+    return res.redirect('/login');
+  }
+
+       const saldo = usuario.balance? usuario.balance: '0';
+       const nombre = usuario.username;
+        const historial = usuario.Resultados || [];
+
+        const historialDePartidas = historial.slice(-5).reverse().map(partida => {
+            
+            const esRojo = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]).has(partida.numeroGanador);
+            const color = (partida.numeroGanador == 0) ? 'green' : (esRojo ? 'red' : 'black');
+            
+            return {
+                numeros: partida.tipoApuesta,
+                monto: partida.totalApostado,
+                variacion: partida.variacion,
+                numeroGanador: partida.numeroGanador,
+                numeroColor: `color-${color}`,
+                numeroColorTexto: color
+            }
+        });
+
+       res.render('ruleta', {
+            saldo: saldo, 
+            nombre: nombre,
+            historialDePartidas: historialDePartidas
+        })
+      }
+      catch(error){
+        console.error("Error en app.get('/ruleta'):", error);
         res.status(500).send('error del servidor');
-    }
+      }
 })
 
 app.post('/ruleta', async(req,res)=>{
   const ID = req.cookies.ID;
-  const {numeroGanador, colorGanador, tipoApuesta, totalApostado, Resultado} = req.body;
+  const {numeroGanador, colorGanador, tipoApuesta, totalApostado, resultado} = req.body; 
+  
   try{
     const update= await Usuario.findByIdAndUpdate(
       ID,{
-        $inc:{balance:Resultado},
-      
+        $inc: { balance: resultado }, 
         $push:{
           Resultados:{
-            numeroGanador:numeroGanador,
-            colorGanador:colorGanador,
-            tipoApuesta:tipoApuesta,
-            totalApostado:totalApostado,
-            fecha:new Date()
+            numeroGanador: numeroGanador,
+            colorGanador: colorGanador,
+            tipoApuesta: tipoApuesta,
+            totalApostado: totalApostado,
+            variacion: resultado,
+            fecha: new Date()
           }
         }
       },
       {new:true}
     )
+    res.redirect('/ruleta');
   }
   catch(error){
     console.error(error);
@@ -239,7 +251,6 @@ app.get('/wallet', async (req, res) => {
     const saldo = usuario.balance;
     const nombre = usuario.username; 
     
-    // Ordenar historial: transacciones más recientes primero y formatear fecha
     const historialOrdenado = usuario.historial.map(transaccion => ({
       tipo: transaccion.tipo,
       monto: transaccion.monto,

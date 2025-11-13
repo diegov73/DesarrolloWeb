@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <head>  </head>
-  <body>
+ <div class="fondoMain">
+  <h2>¡Bienvenido {{nombre}}!</h2> <br>
+  <h3>Su saldo es: $ {{saldo}} </h3> <br>
   <h3 class="rr-subtitulo">Últimas 5 apuestas </h3> 
-       <!--falta tabla ultimas transacciones, boton de eliminar cuenta y boton de cerrar sesion-->
 
   <form method="post" action="logOut">
     <button type="submit">cerrar sesion</button>
@@ -12,6 +12,9 @@
     <button type="submit">borrar cuenta</button>
   </form>
 
-  <a class="enlace" href="ruleta.handlebars"> <li class="izq">volver a ruleta</li></a>
+   <p style="text-align: center;">
+      <a href="/ruleta" style="color: red; font-weight: bold; text-decoration: none;"> Ir a la ruleta</a>
+   </p>
   </body>
+  </div>
 </html>
