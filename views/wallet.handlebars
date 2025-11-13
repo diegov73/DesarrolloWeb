@@ -4,6 +4,7 @@
     <meta charset='utf-8'>
 </head>
 <body>
+    <div class="fondoMain">
     <form method="post" action="/wallet">
         Agregar: <input type="number" name="add">
         <button type="submit">Confirmar</button>
@@ -20,14 +21,17 @@
         <ul>
             {{#each historial}}
                 <li>
-                    {{tipo}} de ${{monto}} — {{fecha}}
+                    {{this.tipo}} de ${{this.monto}} — {{this.fecha}}
                 </li>
             {{/each}}
         </ul>
     {{else}}
         <p>No tienes transacciones aún.</p>
     {{/if}}
-
-    <a href="/ruleta">Volver a ruleta</a>
+       <a href="/ruleta" class="link" 
+               style="display: inline-block; text-decoration: none; padding: 10px 20px; margin-top: 15px;">
+                Volver a apostar
+        </a>
+    </div>
 </body>
 </html>

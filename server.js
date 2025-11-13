@@ -3,7 +3,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const { engine } = require('express-handlebars');
 const path = require('path');
-const mongoose = require('mongoose') // npm install mongodb
+const mongoose = require('mongoose'); // npm install mongodb
+const { Timestamp } = require('mongodb');
 
 const app = express();
 const port = 3000;
@@ -55,16 +56,20 @@ const UsuarioSchema = new mongoose.Schema({
       },
       colorGanador:{
         type: String,
-        enum:['verde','rojo','negro'],
+        enum:['red','green','blue'],
         required: true
       },
       tipoApueta:{
         type: String,
         required: true
       },
-      saldoGanado:{
+      resultado:{
         type: Number,
         required: true
+      },
+      fecha:{
+        type: Date,
+        default: Date.now
       }
   }]
 }, {
@@ -193,15 +198,35 @@ app.get('/ruleta', async(req, res)=>{
         res.status(500).send('error del servidor');
     }
 })
-/*
-app.post('/ruleta', async(req,res)=>{
-  try{
 
+app.post('/ruleta', async(req,res)=>{
+  const ID = req.cookies.ID;
+  const {numeroGanador, colorGanador, tipoApuesta, totalApostado, Resultado} = req.body;
+  try{
+    const update= await Usuario.findByIdAndUpdate(
+      ID,{
+        $inc:{balance:Resultado},
+      
+        $push:{
+          Resultados:{
+            numeroGanador:numeroGanador,
+            colorGanador:colorGanador,
+            tipoApuesta:tipoApuesta,
+            totalApostado:totalApostado,
+            fecha:new Date()
+          }
+        }
+      },
+      {new:true}
+    )
+  }
+  catch(error){
+    console.error(error);
+    res.status(500).send('error del servidor');
   }
 })
-*/
 
-//wallet  muestra saldo e historial
+// wallet muestra saldo e historial
 app.get('/wallet', async (req, res) => {
   try {
     const ID = req.cookies.ID;
@@ -213,17 +238,26 @@ app.get('/wallet', async (req, res) => {
     
     const saldo = usuario.balance;
     const nombre = usuario.username; 
-    // Ordenar historial: transacciones más recientes primero
-    const historialOrdenado = [...usuario.historial].reverse();
     
-    res.render('wallet', {saldo:saldo, nombre:nombre, historial: historialOrdenado});
+    // Ordenar historial: transacciones más recientes primero y formatear fecha
+    const historialOrdenado = usuario.historial.map(transaccion => ({
+      tipo: transaccion.tipo,
+      monto: transaccion.monto,
+      fecha: transaccion.fecha ? transaccion.fecha.toLocaleDateString() : 'Fecha no disponible'
+    })).reverse();
+    
+    res.render('wallet', {
+      saldo: saldo, 
+      nombre: nombre, 
+      historial: historialOrdenado
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error al cargar wallet');
   }
 });
 
-//manejar depósitos y retiros
+// manejar depósitos y retiros
 app.post('/wallet', async (req, res) => {
   try {
     const ID = req.cookies.ID;
@@ -232,12 +266,20 @@ app.post('/wallet', async (req, res) => {
 
     const usuario = await Usuario.findById(ID);
     if (!usuario) {
-      return res.status(400).render('wallet', { saldo: 0, mensaje: 'Usuario no encontrado' });
+      return res.status(400).render('wallet', { 
+        saldo: 0, 
+        historial: [],
+        mensaje: 'Usuario no encontrado' 
+      });
     }
 
-    //  Depositar dinero
+    // Depositar dinero
     if (add && add > 0) {
-      const transaccion = { tipo: 'deposito', monto: add };
+      const transaccion = { 
+        tipo: 'deposito', 
+        monto: add,
+        fecha: new Date()
+      };
 
       const update = await Usuario.findByIdAndUpdate(
         ID,
@@ -250,7 +292,13 @@ app.post('/wallet', async (req, res) => {
 
       res.cookie('saldo', update.balance.toString());
 
-      const historialOrdenado = [...update.historial].reverse();
+      // Formatear historial para la vista
+      const historialOrdenado = update.historial.map(trans => ({
+        tipo: trans.tipo,
+        monto: trans.monto,
+        fecha: trans.fecha ? trans.fecha.toLocaleDateString() : 'Fecha no disponible'
+      })).reverse();
+
       return res.render('wallet', {
         saldo: update.balance,
         historial: historialOrdenado,
@@ -261,7 +309,12 @@ app.post('/wallet', async (req, res) => {
     // Retirar dinero (verificación de saldo)
     if (subtrac && subtrac > 0) {
       if (usuario.balance < subtrac) {
-        const historialOrdenado = [...usuario.historial].reverse();
+        const historialOrdenado = usuario.historial.map(trans => ({
+          tipo: trans.tipo,
+          monto: trans.monto,
+          fecha: trans.fecha ? trans.fecha.toLocaleDateString() : 'Fecha no disponible'
+        })).reverse();
+
         return res.render('wallet', {
           saldo: usuario.balance,
           historial: historialOrdenado,
@@ -269,7 +322,11 @@ app.post('/wallet', async (req, res) => {
         });
       }
 
-      const transaccion = { tipo: 'retiro', monto: subtrac };
+      const transaccion = { 
+        tipo: 'retiro', 
+        monto: subtrac,
+        fecha: new Date()
+      };
 
       const update = await Usuario.findByIdAndUpdate(
         ID,
@@ -282,7 +339,12 @@ app.post('/wallet', async (req, res) => {
 
       res.cookie('saldo', update.balance.toString());
 
-      const historialOrdenado = [...update.historial].reverse();
+      const historialOrdenado = update.historial.map(trans => ({
+        tipo: trans.tipo,
+        monto: trans.monto,
+        fecha: trans.fecha ? trans.fecha.toLocaleDateString() : 'Fecha no disponible'
+      })).reverse();
+
       return res.render('wallet', {
         saldo: update.balance,
         historial: historialOrdenado,
@@ -291,7 +353,12 @@ app.post('/wallet', async (req, res) => {
     }
 
     // Si no se ingresó ningún valor válido
-    const historialOrdenado = [...usuario.historial].reverse();
+    const historialOrdenado = usuario.historial.map(trans => ({
+      tipo: trans.tipo,
+      monto: trans.monto,
+      fecha: trans.fecha ? trans.fecha.toLocaleDateString() : 'Fecha no disponible'
+    })).reverse();
+
     res.status(400).render('wallet', {
       saldo: usuario.balance,
       historial: historialOrdenado,
@@ -300,11 +367,13 @@ app.post('/wallet', async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).render('wallet', { saldo: 0, mensaje: 'Error del servidor' });
+    res.status(500).render('wallet', { 
+      saldo: 0, 
+      historial: [],
+      mensaje: 'Error del servidor' 
+    });
   }
 });
-
-
 
 //perfil
 app.get("/perfil", async(req,res)=>{
